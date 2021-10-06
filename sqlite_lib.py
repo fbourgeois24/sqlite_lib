@@ -8,7 +8,7 @@ import time
 class sqlite_database:
 	""" Classe pour la gestion d'une base de données sqlite
 		Paramètres:
-			dbName = Nom de la DB
+			db_name = Nom de la DB
 			GUI = Type d'interface graphique utilisée
 				- None (Défaut)
 				- tkinter
