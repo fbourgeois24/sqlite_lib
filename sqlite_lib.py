@@ -45,6 +45,7 @@ class sqlite_database:
 		else:
 			if self.GUI == 'tkinter':
 				showwarning("Base de données introuvable !", "La base de données est introuvable, le programme va se fermer !!")
+			raise FileExistsError("La base de données n'existe pas")
 			sys.exit(0)
 
 
