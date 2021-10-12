@@ -28,25 +28,25 @@ class sqlite_database:
 		""" Méthode pour se connecter à la base de données """
 		if os.path.exists("./" + self.name):
 			# Si la db est inacessible, on réessaye 
-			for i in range(10):	
-				try:
-					self.db = sqlite3.connect(self.name)
-					if returnFormat == 'dict':
-						self.db.row_factory = sqlite3.Row
-					self.cursor = self.db.cursor()
-					return True
-				except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
-					if e == "database is locked":
-						time.sleep(0.2)
-					else:
-						print(traceback.format_exc())
-						return False
+			# for i in range(10):	
+				# try:
+			self.db = sqlite3.connect(self.name)
+			if returnFormat == 'dict':
+				self.db.row_factory = sqlite3.Row
+			self.cursor = self.db.cursor()
+			return True
+				# except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
+				# 	if e == "database is locked":
+				# 		time.sleep(0.2)
+				# 	else:
+				# 		print(traceback.format_exc())
+				# 		return False
 
 		else:
 			if self.GUI == 'tkinter':
 				showwarning("Base de données introuvable !", "La base de données est introuvable, le programme va se fermer !!")
-			raise FileExistsError("La base de données n'existe pas")
-			sys.exit(0)
+			raise FileNotFoundError(f"fichier {self.name} inexistant")
+			exit(1)
 
 
 
@@ -56,23 +56,23 @@ class sqlite_database:
 			self.commit()
 		self.cursor.close()
 		self.db.close()
-		
+
 
 
 	def execute(self,query):
 		""" Méthode pour exécuter une requête """
 		# Si la db est inacessible, on réessaye 
 		# L'erreur est : sqlite3.OperationalError: database is locked
-		for i in range(5):
-			try:
-				self.cursor.execute(query)
-				return True
-			except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
-				if e == "database is locked":
-					time.sleep(0.2)
-				else:
-					print(e)
-					return False
+		# for i in range(5):
+		# 	try:
+		self.cursor.execute(query)
+		return True
+			# except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
+			# 	if e == "database is locked":
+			# 		time.sleep(0.2)
+			# 	else:
+			# 		print(e)
+			# 		return False
 
 	def exec(self,query, fetch = "all", return_format='list'):
 		""" Méthode pour exécuter un requête et qui gère l'ouverture et la fermeture de la db automatiquement """
