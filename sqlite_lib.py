@@ -1,7 +1,20 @@
 import os, sys
-import traceback
+# import traceback
 import sqlite3 # Installer avec 'pip install db-sqlite3'
 import time
+from datetime import datetime as dt
+
+
+def log(msg, output=""):
+	""" Afficher le log dans la sortie standard ou dans un fichier 
+		Si rien n'est spécifié dans output : sortie standard
+		Si un nom est spécifé un fichier avec ce nom sera créé """
+	if output != "":
+		logFile = open(output, 'a')
+		print(str(dt.now()) + " -> " + str(msg), file=logFile)
+		logFile.close()
+	else:
+		print(str(dt.now()) + " -> " + str(msg))
 
 
 """ Utilitaires pour gérer une db sqlite """
@@ -68,10 +81,12 @@ class sqlite_database:
 				self.cursor.execute(query)
 				return True
 			except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
+				log(f"Error is : {e}")
 				if e == "database is locked":
-					time.sleep(0.2)
+					log("Base de données verrouillée, attente ...")
+					time.sleep(0.5)
 				else:
-					print(traceback.format_exc())
+					log(sys.exc_info())
 					return False
 	def exec(self,query, fetch = "all", return_format='list'):
 		""" Méthode pour exécuter un requête et qui gère l'ouverture et la fermeture de la db automatiquement """
