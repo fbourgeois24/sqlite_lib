@@ -82,7 +82,7 @@ class sqlite_database:
 				return True
 			except sqlite3.OperationalError as e: #sqlite3.OperationalError: database is locked:
 				log(f"Error is : {e}")
-				if e == "database is locked":
+				if str(e) == "database is locked":
 					log("Base de données verrouillée, attente ...")
 					time.sleep(0.5)
 				else:
@@ -103,6 +103,9 @@ class sqlite_database:
 				result = self.fetchall()
 			elif (not commit) and fetch == "one":
 				result = self.fetchone()
+			elif (not commit) and fetch == "single":
+				# single renvoie la première valeur de la première ligne
+				result = self.fetchone()[0]
 			self.close(commit)
 			if not commit:
 				if type(result) is None:
