@@ -105,7 +105,9 @@ class sqlite_database:
 				result = self.fetchone()
 			elif (not commit) and fetch == "single":
 				# single renvoie la première valeur de la première ligne
-				result = self.fetchone()[0]
+				result = self.fetchone()
+				if result is not None:
+					result = result[0]
 			self.close(commit)
 			if not commit:
 				if type(result) is None:
